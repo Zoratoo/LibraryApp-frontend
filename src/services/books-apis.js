@@ -12,10 +12,10 @@ export const fetchBooks = async () => {
             const data = await response.json();
             return data;
         } else {
-            throw new Error(`Erro na requisição: ${response.status}`);
+            throw new Error(`Request error: ${response.status}`);
         }
     } catch (error) {
-        console.error("Erro ao buscar livros:", error);
+        console.error("Error to find books:", error);
         throw error;
     }
 };
@@ -32,10 +32,10 @@ export const fetchGenres = async () => {
             const data = await response.json();
             return data;
         } else {
-            throw new Error(`Erro na requisição: ${response.status}`);
+            throw new Error(`Request error: ${response.status}`);
         }
     } catch (error) {
-        console.error("Erro ao buscar gêneros:", error);
+        console.error("Error to find genres:", error);
         throw error;
     }
 };

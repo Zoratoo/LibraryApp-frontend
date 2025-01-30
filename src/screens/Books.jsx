@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import Page from '../templates/page';
 import '../css/books.css';
 import { fetchBooks, fetchGenres } from '../services/books-apis';
+import { IoIosSearch } from "react-icons/io";
+import "@fortawesome/fontawesome-free/css/all.min.css";
 
 export default function Books(props) {
     const [books, setBooks] = useState([]);
@@ -31,7 +33,7 @@ export default function Books(props) {
 
     useEffect(() => {
         filterBooks();
-    }, [filter]); 
+    }, [filter]);
 
     const filterBooks = () => {
         let filtered = books;
@@ -70,21 +72,33 @@ export default function Books(props) {
                 <h1 className="text-center mb-4 custom-title">Books</h1>
 
                 <div className="d-flex mb-4 justify-content-center">
-                    <input
-                        type="text"
-                        name="title"
-                        className="form-control me-2"
-                        placeholder="Filter by Title"
-                        value={filter.title}
-                        onChange={handleFilterChange}
-                        style={{ width: '60%' }}
-                    />
+                    <div className="input-group" style={{ width: '60%' }}>
+                        <span className="input-group-text" style={{ border: '2px solid #ced4da', backgroundColor: '#fff' }}>
+                            <IoIosSearch style={{ width: '20px', height: '20px', color: '#6c757d' }} />
+                        </span>
+                        <input
+                            type="text"
+                            name="title"
+                            className="form-control"
+                            placeholder="Enter the title of the book you are looking for..."
+                            value={filter.title}
+                            onChange={handleFilterChange}
+                            style={{
+                                border: '2px solid #ced4da',
+                                boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
+                            }}
+                        />
+                    </div>
                     <select
                         name="genre"
                         className="form-control ms-2"
                         value={filter.genre}
                         onChange={handleFilterChange}
-                        style={{ width: '20%' }}
+                        style={{
+                            width: '20%',
+                            border: '2px solid #ced4da',
+                            boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
+                        }}
                     >
                         <option value="">Select a Genre</option>
                         {genres.length > 0 ? (
@@ -99,7 +113,6 @@ export default function Books(props) {
                     </select>
                 </div>
 
-
                 {isLoading ? (
                     <div className="d-flex justify-content-center">
                         Loading...
@@ -108,11 +121,17 @@ export default function Books(props) {
                     <div className="row row-cols-1 row-cols-md-3 g-4">
                         {filteredBooks.map((book, index) => (
                             <div key={index} className="col">
-                                <div className="card shadow-sm border-light rounded-3">
-                                    <img src={book.image_url} className="card-img-top" alt={book.title} />
-                                    <div className="card-body">
+                                <div className="card shadow-lg border-0 rounded-4 overflow-hidden">
+                                    <div className="card-img-container">
+                                        <img
+                                            src={book.image_url}
+                                            className="card-img-top rounded-3 img-fluid"
+                                            alt={book.title}
+                                        />
+                                    </div>
+                                    <div className="card-body p-4">
                                         <h5 className="card-title">{book.title}</h5>
-                                        <p className="card-text">
+                                        <p className="card-text text-muted">
                                             <strong>Author:</strong> {book.author}
                                             <br />
                                             <strong>Publisher:</strong> {book.publisher}
@@ -122,6 +141,8 @@ export default function Books(props) {
                                             <strong>Genre:</strong> {book.genre}
                                             <br />
                                             <strong>Quantity:</strong> {book.quantity}
+                                            <br />
+                                            <strong>Quantity available:</strong> {book.available}
                                             <br />
                                             <strong>Price:</strong> R${book.price}
                                         </p>

@@ -1,5 +1,5 @@
 import React from 'react';
-import Dashboard from './dashboard';
+import Navibar from './navbar';
 
 export default function Page(props) {
     return (
@@ -8,7 +8,7 @@ export default function Page(props) {
                 position: 'fixed', 
                 boxShadow: '2px 0 5px rgba(0,0,0,0.4)',
             }}>
-                <Dashboard />
+                <Navibar />
             </div>
             
             <div className="pagina-content flex-grow-1" style={{ marginLeft: '250px', marginBottom: '50px' }}>

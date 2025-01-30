@@ -3,12 +3,12 @@ import { Link } from "react-router-dom";
 import '../css/dashboard.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-const Dashboard = () => {
+const Navibar = () => {
   return (
     <div className="d-flex flex-column vh-100" style={{ width: '250px', backgroundColor: '#343a40', color: 'white' }}>
       <div className="p-4 fs-4 fw-bold border-bottom" style={{ borderColor: '#495057', boxShadow: '0 2px 4px rgba(255, 255, 255, 0.2)' }}>
-        <Link to="/" className="text-white text-decoration-none">
-          📚 Library
+        <Link to="/" className="text-white text-decoration-none" style={{ fontFamily: 'Poppins, sans-serif' }}>
+          📚 LIBRARY
         </Link>
       </div>
       <nav className="flex-fill mt-4">
@@ -28,7 +28,11 @@ const Dashboard = () => {
             </Link>
           </li>
           <li className="p-2">
-            <a href="#about" className="text-white text-decoration-none hover-underline">ℹ️ About</a>
+            <Link to="/clients" className="nav-link">
+              <div className="text-white text-decoration-none hover-underline">
+                👥 Clients
+              </div>
+            </Link>
           </li>
           <li className="p-2">
             <a href="#contact" className="text-white text-decoration-none hover-underline">✉️ Contact</a>
@@ -42,4 +46,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default Navibar;
