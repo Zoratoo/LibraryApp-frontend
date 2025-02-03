@@ -21,3 +21,25 @@ export const fetchClientCpf = async (cpf) => {
         throw error;
     }
 };
+
+export const fetchRentalsCpf = async (cpf) => {
+    try {
+        const encodedCpf = encodeURIComponent(cpf);
+        const response = await fetch(`${API_URL}/find-rentals-cpf?cpf=${encodedCpf}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            return data;
+        } else {
+            throw new Error(`Request error: ${response.status}`);
+        }
+    } catch (error) {
+        console.error("Error to find rentals:", error);
+        throw error;
+    }
+};

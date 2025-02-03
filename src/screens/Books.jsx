@@ -3,6 +3,7 @@ import Page from '../templates/page';
 import '../css/books.css';
 import { fetchBooks, fetchGenres } from '../services/books-apis';
 import { IoIosSearch } from "react-icons/io";
+import ErrorModal from '../modals/error.jsx';
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
 export default function Books(props) {
@@ -11,6 +12,8 @@ export default function Books(props) {
     const [filteredBooks, setFilteredBooks] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [filter, setFilter] = useState({ title: '', genre: '' });
+    const [showErrorModal, setShowErrorModal] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
 
     useEffect(() => {
         const loadData = async () => {
@@ -25,6 +28,8 @@ export default function Books(props) {
                 setIsLoading(false);
             } catch (error) {
                 setIsLoading(false);
+                setErrorMessage('Error to find books.');
+                setShowErrorModal(true);
             }
         };
 
@@ -43,7 +48,8 @@ export default function Books(props) {
 
         if (filter.title !== "" && filter.genre === "")
             filtered = filtered.filter(book =>
-                book.title.toLowerCase().includes(filter.title.toLowerCase())
+                book.title.toLowerCase().includes(filter.title.toLowerCase()) ||
+                book.author.toLowerCase().includes(filter.title.toLowerCase())
             );
 
         if (filter.title === "" && filter.genre !== "")
@@ -53,7 +59,8 @@ export default function Books(props) {
 
         if (filter.title !== "" && filter.genre !== "")
             filtered = filtered.filter(book =>
-                book.title.toLowerCase().includes(filter.title.toLowerCase()) &&
+                (book.title.toLowerCase().includes(filter.title.toLowerCase())||
+                book.author.toLowerCase().includes(filter.title.toLowerCase())) &&
                 book.genre.toLowerCase().includes(filter.genre.toLowerCase())
             );
 
@@ -64,6 +71,10 @@ export default function Books(props) {
         const { name, value } = e.target;
         const updatedFilter = { ...filter, [name]: value };
         setFilter(updatedFilter);
+    };
+
+    const handleCloseModal = () => {
+        setShowErrorModal(false);
     };
 
     return (
@@ -132,19 +143,29 @@ export default function Books(props) {
                                     <div className="card-body p-4">
                                         <h5 className="card-title">{book.title}</h5>
                                         <p className="card-text text-muted">
-                                            <strong>Author:</strong> {book.author}
+                                            <strong className="card-text" style={{ fontSize: "20px" }}>{book.author}</strong>
                                             <br />
-                                            <strong>Publisher:</strong> {book.publisher}
-                                            <br />
-                                            <strong>Publication Year:</strong> {book.publication_year}
-                                            <br />
-                                            <strong>Genre:</strong> {book.genre}
-                                            <br />
-                                            <strong>Quantity:</strong> {book.quantity}
-                                            <br />
-                                            <strong>Quantity available:</strong> {book.available}
-                                            <br />
-                                            <strong>Price:</strong> R${book.price}
+                                            <p className="card-text2" style={{ opacity: "0.8", marginLeft: "2%" }}>{book.publisher}, {book.publication_year}</p>
+                                            <hr className="divider-light" />
+                                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
+                                                <p className="card-text2" style={{ marginLeft: "2%", color: "rgb(50, 50, 50)" }}>{book.genre}</p>
+                                                {book.available > 0 && (
+                                                    <span style={{
+                                                        backgroundColor: "#D4EDDA",
+                                                        color: "#155724",
+                                                        padding: "5px 10px",
+                                                        borderRadius: "10px",
+                                                        fontSize: "14px",
+                                                        fontWeight: "bold",
+                                                        margin: "0 10px"
+                                                    }}>
+                                                        Available
+                                                    </span>
+                                                )}
+                                                <b className="card-text2" style={{ marginRight: "2%", color: "rgb(50, 50, 50)" }}>{book.available}/{book.quantity}</b>
+                                            </div>
+                                            <hr className="divider-light" />
+                                            <strong style={{ marginLeft: "80%", fontSize: "20px" }}>R${book.price}</strong>
                                         </p>
                                     </div>
                                 </div>
@@ -152,7 +173,13 @@ export default function Books(props) {
                         ))}
                     </div>
                 )}
+
+                <ErrorModal
+                    show={showErrorModal}
+                    message={errorMessage}
+                    onClose={handleCloseModal}
+                />
             </div>
         </Page>
     );
-};
+}

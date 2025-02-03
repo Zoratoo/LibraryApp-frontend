@@ -1,0 +1,50 @@
+.status {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.status.f {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.status.n {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.status.p {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.card-rental {
+    display: flex;
+    align-items: center;
+}
+
+.card-date {
+    margin: 0;
+}
+
+.status-container {
+    flex: 1;
+    text-align: center;
+}
+
+.client-info-card {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.client-info-card p {
+    margin: 0;
+}

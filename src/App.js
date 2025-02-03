@@ -2,7 +2,7 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Home from './screens/Home.jsx';
 import Books from './screens/Books.jsx';
-import Clients from './screens/Clients.jsx';
+import Clients from './screens/client/Clients.jsx';
 import "./index.css"; 
  
 function App() { 
