@@ -43,3 +43,25 @@ export const fetchRentalsCpf = async (cpf) => {
         throw error;
     }
 };
+
+export const postClient = async (client) => {
+    try {
+        const response = await fetch(`${API_URL}/add`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(client),
+        });
+
+        if (response.ok) {
+            return true;
+        } else {
+            throw new Error(`Request error: ${response.status}`);
+        }
+    } catch (error) {
+        console.error("Error adding client:", error);
+        throw error;
+    }
+};
+

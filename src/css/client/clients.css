@@ -1,0 +1,44 @@
+
+
+.btn-new-rental {
+    font-size: .8rem;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    justify-content: center;
+    font-weight: bold;
+    background-color: #343a40;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-new-rental:hover {
+    background-color: #ffffff;
+    color: #343a40 !important;
+}
+
+.btn-new-rental:hover .btn-new-rental-bg {
+    transform: translateX(0%) !important;
+}
+
+.btn-new-rental-bg {
+    background-color: white;
+    z-index: 0;
+    transition: transform 0.4s ease-in-out;
+    transform: translateX(100%);
+}
+
+.btn-new-rental-icon {
+    font-size: 1rem;
+    z-index: 1;
+}
+
+.btn-new-rental-text {
+    z-index: 1;
+}

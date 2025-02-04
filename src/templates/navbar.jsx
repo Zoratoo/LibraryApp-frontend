@@ -35,7 +35,11 @@ const Navibar = () => {
             </Link>
           </li>
           <li className="p-2">
-            <a href="#contact" className="text-white text-decoration-none hover-underline">✉️ Contact</a>
+            <Link to="/rentals" className="nav-link">
+              <div className="text-white text-decoration-none hover-underline">
+                📦 Rentals
+              </div>
+            </Link>
           </li>
         </ul>
       </nav>

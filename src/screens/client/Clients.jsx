@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import Page from '../../templates/page.jsx';
 import { fetchClientCpf, fetchRentalsCpf } from '../../services/clients-apis.js';
-import { IoIosSearch } from "react-icons/io";
-import { FaChevronDown, FaChevronUp, FaTrash } from "react-icons/fa";
-import { LuCalendarArrowDown, LuCalendarArrowUp } from "react-icons/lu";
-import { MdOutlineMail, MdOutlineLocalPhone, MdOutlineLocationOn, MdPersonAddAlt1 } from "react-icons/md";
-import { HiPencilAlt } from "react-icons/hi";
-import '../../css/clients.css';
+import RentalCard from '../rental/rental-card.jsx';
+import ClientCard from './client-card.jsx';
+import SearchInput from '../components/search-client-input.jsx';
+import ErrorModal from '../../modals/error.jsx';
+import { FaCirclePlus } from "react-icons/fa6";
+import '../../css/client/clients.css';
+import { maskCpf } from '../../utilities/masks';
 
 export default function Clients() {
     const [cpf, setCpf] = useState('');
@@ -15,6 +16,14 @@ export default function Clients() {
     const [rentalsClient, setRentalsClient] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [expandedRentals, setExpandedRentals] = useState({});
+    const [showErrorModal, setShowErrorModal] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
+
+    const navigate = useNavigate();
+
+    const handleCloseModal = () => {
+        setShowErrorModal(false);
+    };
 
     const toggleExpand = (rentalId) => {
         setExpandedRentals((prev) => ({
@@ -24,16 +33,14 @@ export default function Clients() {
     };
 
     const handleCpfChange = (e) => {
-        setCpf(e.target.value);
+        const maskedValue = maskCpf(e.target.value.slice(0, 14));
+        setCpf(maskedValue);
     };
-
-    const [error, setError] = useState(null);
 
     const handleSearch = async () => {
         if (!cpf) return;
 
         setIsLoading(true);
-        setError(null);
 
         try {
             const client = await fetchClientCpf(cpf);
@@ -42,138 +49,63 @@ export default function Clients() {
                 const rentals = await fetchRentalsCpf(cpf);
                 setRentalsClient(rentals);
             } catch (error) {
-                console.error('Erro ao buscar aluguéis:', error);
-                setError('Erro ao buscar aluguéis, tente novamente.');
+                console.error('Dont found rentals or error: ', error);
             }
         } catch (error) {
-            console.error('Erro ao buscar cliente:', error);
-            setError('Erro ao buscar cliente, tente novamente.');
+            setErrorMessage('Client not found. Try again.');
+            setShowErrorModal(true);
         }
 
         setIsLoading(false);
+    };
+
+    const handleNewRental = () => {
+        navigate('/rentals', { state: { clientData: clienteData } });
     };
 
     return (
         <Page>
             <div className="container py-5">
                 <h1 className="text-center mb-4 custom-title">Clients</h1>
-                <div className="d-flex mb-4 justify-content-center">
-                    <div className="input-group" style={{ width: '40%' }}>
-                        <span className="input-group-text" style={{ border: '2px solid #ced4da', backgroundColor: '#fff' }}>
-                            <IoIosSearch style={{ width: '20px', height: '20px', color: '#6c757d' }} />
-                        </span>
-                        <input
-                            value={cpf}
-                            onChange={handleCpfChange}
-                            className="form-control"
-                            id="cpf"
-                            placeholder="Type a client CPF"
-                            style={{
-                                border: '2px solid #ced4da',
-                                boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
-                            }}
-                        />
+                <SearchInput
+                    cpf={cpf}
+                    handleCpfChange={handleCpfChange}
+                    handleSearch={handleSearch}
+                    isLoading={isLoading}
+                    showAddIcon={true}
+                />
+
+                {clienteData && <ClientCard clientData={clienteData} />}
+
+                {rentalsClient && (
+                    <div className="d-flex justify-content-center my-4">
+                        <button
+                            className="btn-new-rental fw-bold d-flex align-items-center gap-2 px-3 py-2 rounded-pill position-relative overflow-hidden justify-content-center"
+                            onClick={handleNewRental}
+                        >
+                            <span className="btn-new-rental-bg position-absolute top-0 start-100 w-100 h-100" />
+                            <FaCirclePlus className="btn-new-rental-icon" />
+                            <span className="btn-new-rental-text">New Rental</span>
+                        </button>
                     </div>
-                    <span className="input-group-text" style={{
-                        border: '2px solid #ced4da', backgroundColor: '#fff',
-                        boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
-                        cursor: 'pointer'}}>
-                        <MdPersonAddAlt1 style={{ width: '20px', height: '20px', color: 'black' }} />
-                    </span>
-                </div>
-                <div className="d-flex justify-content-center mb-4">
-                    <button
-                        onClick={handleSearch}
-                        className="btn btn-primary"
-                        disabled={isLoading || !cpf}
-                    >
-                        {isLoading ? 'Searching...' : 'Search'}
-                    </button>
-                </div>
-
-                {error && <p className="text-danger">{error}</p>}
-
-                {clienteData && (
-                    <div className="client-info-card mt-1 p-3" style={{ position: 'relative' }}>
-                        <div>
-                            <p className='text-center fw-bold fs-4'>{clienteData.name}</p>
-                        </div>
-                        <hr className="divider-light" />
-                        <div className="d-flex justify-content-between" style={{ marginRight: '2%', marginLeft: '2%' }}>
-                            <p className='text-center'><MdOutlineLocalPhone /> {clienteData.phone}</p>
-                            <p className='text-center'><MdOutlineMail /> {clienteData.email}</p>
-                            <p className='text-center'><MdOutlineLocationOn /> {clienteData.address}</p>
-                        </div>
-                        <hr className="divider-light" />
-                        <div className="d-flex justify-content-center" style={{ marginRight: '2%', marginLeft: '2%', gap: '2%' }}>
-                            <HiPencilAlt style={{ cursor: 'pointer' }} />
-                            <FaTrash style={{ cursor: 'pointer' }} />
-                        </div>
-                    </div>
-
                 )}
 
                 <div className="mt-4">
                     {rentalsClient && rentalsClient.sort((a, b) => new Date(b.start_date) - new Date(a.start_date))
                         .map((rental) => (
-                            <motion.div
+                            <RentalCard
                                 key={rental.id}
-                                className="card mb-3 mx-auto"
-                                style={{ maxWidth: "80%", overflow: "hidden" }}
-                                initial={{ height: "auto" }}
-                                animate={{ height: expandedRentals[rental.id] ? "auto" : "fit-content" }}
-                                transition={{ duration: 0.4, ease: "easeInOut" }}
-                            >
-                                <div className="card-rental modern-card d-flex align-items-center p-3">
-                                    <div className="text-left">
-                                        <p className="card-date">
-                                            <b><LuCalendarArrowUp /> {rental.start_date}</b>
-                                        </p>
-                                        <p className="card-date">
-                                            <b><LuCalendarArrowDown /> {rental.end_date}</b>
-                                        </p>
-                                    </div>
-                                    <div className="text-center status-container">
-                                        <span className={`status ${rental.status}`}>
-                                            {rental.status === 'f' ? 'Finished' : rental.status === 'n' ? 'Not payed' : 'In Progress'}
-                                        </span>
-                                    </div>
-                                    <button className="btn btn-light" onClick={() => toggleExpand(rental.id)}>
-                                        {expandedRentals[rental.id] ? <FaChevronUp /> : <FaChevronDown />}
-                                    </button>
-                                </div>
-
-                                <AnimatePresence>
-                                    {expandedRentals[rental.id] && rental.book && (
-                                        <motion.div
-                                            className="p-3"
-                                            initial={{ opacity: 0, y: -10 }}
-                                            animate={{ opacity: 1, y: 0 }}
-                                            exit={{ opacity: 0, y: -10 }}
-                                            transition={{ duration: 0.3 }}
-                                        >
-                                            {rental.book.map((book) => (
-                                                <div key={book.id} className="card mb-2" style={{ maxWidth: "90%", margin: "0 auto" }}>
-                                                    <div className="d-flex align-items-stretch">
-                                                        <div className="p-3 flex-grow-1 d-flex flex-column justify-content-center">
-                                                            <h6 className="card-title">{book.title}</h6>
-                                                            <p className="card-text">{book.author}</p>
-                                                        </div>
-                                                        <img
-                                                            src={book.image_url}
-                                                            alt={book.title}
-                                                            className="card-img-top rounded-3 img-fluid"
-                                                            style={{ width: "200px", height: "100px" }}
-                                                        />
-                                                    </div>
-                                                </div>
-                                            ))}
-                                        </motion.div>
-                                    )}
-                                </AnimatePresence>
-                            </motion.div>
+                                rental={rental}
+                                expandedRentals={expandedRentals}
+                                toggleExpand={toggleExpand}
+                            />
                         ))}
                 </div>
+                <ErrorModal
+                    show={showErrorModal}
+                    message={errorMessage}
+                    onClose={handleCloseModal}
+                />
             </div>
         </Page>
     );
