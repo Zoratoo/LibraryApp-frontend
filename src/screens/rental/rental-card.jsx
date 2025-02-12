@@ -29,7 +29,7 @@ const RentalCard = ({ rental, expandedRentals, toggleExpand, handleOpenModal }) 
                         {rental.status === 'f' ? 'Finished' : rental.status === 'n' ? 'Not payed' : 'In Progress'}
                     </span>
                 </div>
-                <div style={{ gap: "1rem" }} >
+                <div style={{ display: 'flex', gap: "1rem" }} >
                     {rental.status !== 'f' && (
                         <button className="btn btn-light">
                             <FaCashRegister onClick={() => handleOpenModal(rental.id)} />

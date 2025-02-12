@@ -10,7 +10,7 @@ import { maskCpf } from '../../utilities/masks';
 export default function Rentals(props) {
     const location = useLocation();
     const [clienteData, setClienteData] = useState(null);
-    const [cpf, setCpf] = useState('');
+    const [cpf, setCpf] = useState('123.456.789-01');
     const [isLoading, setIsLoading] = useState(false);
     const [showErrorModal, setShowErrorModal] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
