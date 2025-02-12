@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:8080/apis/client';
+const API_URL = 'https://libraryapi-production-1f9b.up.railway.app/apis/client';
 
 export const fetchClientCpf = async (cpf) => {
     try {

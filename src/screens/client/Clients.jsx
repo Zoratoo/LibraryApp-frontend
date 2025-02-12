@@ -51,25 +51,30 @@ export default function Clients() {
     };
 
     const handleSearch = async () => {
-        if (!cpf) return;
+        setRentalsClient(null);
+        if (!cpf) {
+            setClienteData(null);
+            return;
+        }
+        else {
+            setIsLoading(true);
 
-        setIsLoading(true);
-
-        try {
-            const client = await fetchClientCpf(cpf);
-            setClienteData(client);
             try {
-                const rentals = await fetchRentalsCpf(cpf);
-                setRentalsClient(rentals);
+                const client = await fetchClientCpf(cpf);
+                setClienteData(client);
+                try {
+                    const rentals = await fetchRentalsCpf(cpf);
+                    setRentalsClient(rentals);
+                } catch (error) {
+                    console.error('Dont found rentals or error: ', error);
+                }
             } catch (error) {
-                console.error('Dont found rentals or error: ', error);
+                setErrorMessage('Client not found. Try again.');
+                setShowErrorModal(true);
             }
-        } catch (error) {
-            setErrorMessage('Client not found. Try again.');
-            setShowErrorModal(true);
+            setIsLoading(false);
         }
 
-        setIsLoading(false);
     };
 
     const handleNewRental = () => {
