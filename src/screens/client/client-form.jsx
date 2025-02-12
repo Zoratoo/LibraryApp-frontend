@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Page from '../../templates/page';
 import { postClient } from '../../services/clients-apis';
-import '../../css/client/client-form.css';
+import '../../css/components/forms.css';
 import ErrorModal from '../../modals/error';
 import validateCpf from '../../utilities/validations';
 import { maskPhone, maskCep, maskCpf } from '../../utilities/masks';
@@ -26,7 +26,7 @@ export default function ClientForm(props) {
             maskedValue = maskPhone(value.slice(0, 15));
         } else if (name === 'cep') {
             maskedValue = maskCep(value.slice(0, 9));
-            if (maskedValue.length === 9) { 
+            if (maskedValue.length === 9) {
                 fetchAddress(maskedValue, setFormData);
             }
         } else if (name === 'cpf') {
@@ -157,7 +157,7 @@ export default function ClientForm(props) {
 
                         </div>
                         <div className="d-flex justify-content-center">
-                            <button type="submit" className="btn btn-primary">Submit</button>
+                            <button type="submit" className="btn-modern">Submit</button>
                         </div>
                     </form>
                 </div>

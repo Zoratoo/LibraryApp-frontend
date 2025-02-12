@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Page from '../../templates/page.jsx';
 import '../../css/books.css';
 import { fetchBooks, fetchGenres } from '../../services/books-apis.js';
@@ -6,6 +7,7 @@ import ErrorModal from './../../modals/error.jsx';
 import BookCard from './book-card.jsx';
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import SearchBook from '../components/serch-book-input.jsx';
+import ButtonAdd from '../components/button-add.jsx';
 
 export default function Books(props) {
     const [books, setBooks] = useState([]);
@@ -15,6 +17,8 @@ export default function Books(props) {
     const [filter, setFilter] = useState({ title: '', genre: '' });
     const [showErrorModal, setShowErrorModal] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         const loadData = async () => {
@@ -78,12 +82,25 @@ export default function Books(props) {
         setShowErrorModal(false);
     };
 
+    const handleAddBook = () => {
+        navigate('/books/form');
+    };
+
     return (
         <Page>
             <div className="container py-5">
                 <h1 className="text-center mb-4 custom-title">Books</h1>
 
-                <SearchBook filter={filter} handleFilterChange={handleFilterChange} genres={genres} />
+                <SearchBook
+                    filter={filter}
+                    handleFilterChange={handleFilterChange}
+                    genres={genres}
+                />
+
+                <ButtonAdd
+                    handleButton={handleAddBook}
+                    text="New Book"
+                />
 
                 {isLoading ? (
                     <div className="d-flex justify-content-center">

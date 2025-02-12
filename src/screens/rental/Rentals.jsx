@@ -5,7 +5,6 @@ import { fetchClientCpf } from '../../services/clients-apis.js';
 import ErrorModal from '../../modals/error.jsx';
 import SearchInput from '../components/search-client-input.jsx';
 import ClientCard from '../client/client-card.jsx';
-import '../../css/client/clients.css';
 import { maskCpf } from '../../utilities/masks';
 
 export default function Rentals(props) {

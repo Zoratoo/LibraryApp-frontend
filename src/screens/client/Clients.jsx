@@ -6,30 +6,43 @@ import RentalCard from '../rental/rental-card.jsx';
 import ClientCard from './client-card.jsx';
 import SearchInput from '../components/search-client-input.jsx';
 import ErrorModal from '../../modals/error.jsx';
-import { FaCirclePlus } from "react-icons/fa6";
-import '../../css/client/clients.css';
 import { maskCpf } from '../../utilities/masks';
+import ButtonAdd from '../components/button-add.jsx';
+import ConfirmPaymentModal from '../../modals/confirm-payment.jsx';
 
 export default function Clients() {
-    const [cpf, setCpf] = useState('');
+    const [cpf, setCpf] = useState('123.456.789-01');
     const [clienteData, setClienteData] = useState(null);
     const [rentalsClient, setRentalsClient] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [expandedRentals, setExpandedRentals] = useState({});
     const [showErrorModal, setShowErrorModal] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
+    const [showModalConfirmPayment, setShowModalConfirmPayment] = useState(false);
+    const [currentRentalId, setCurrentRentalId] = useState(null);
 
     const navigate = useNavigate();
 
-    const handleCloseModal = () => {
-        setShowErrorModal(false);
+    const handleOpenModal = (id) => {
+        setCurrentRentalId(id);
+        setShowModalConfirmPayment(true);
     };
 
-    const toggleExpand = (rentalId) => {
-        setExpandedRentals((prev) => ({
-            ...prev,
-            [rentalId]: !prev[rentalId]
-        }));
+    const handleCloseModalPayment = () => {
+        setShowModalConfirmPayment(false);
+        setCurrentRentalId(null);
+    };
+
+    const handleUpdateRentalStatus = (id, status) => {
+        setRentalsClient((prevRentals) =>
+            prevRentals.map((rental) =>
+                rental.id === id ? { ...rental, status } : rental
+            )
+        );
+    };
+
+    const handleCloseModal = () => {
+        setShowErrorModal(false);
     };
 
     const handleCpfChange = (e) => {
@@ -78,16 +91,10 @@ export default function Clients() {
                 {clienteData && <ClientCard clientData={clienteData} />}
 
                 {rentalsClient && (
-                    <div className="d-flex justify-content-center my-4">
-                        <button
-                            className="btn-new-rental fw-bold d-flex align-items-center gap-2 px-3 py-2 rounded-pill position-relative overflow-hidden justify-content-center"
-                            onClick={handleNewRental}
-                        >
-                            <span className="btn-new-rental-bg position-absolute top-0 start-100 w-100 h-100" />
-                            <FaCirclePlus className="btn-new-rental-icon" />
-                            <span className="btn-new-rental-text">New Rental</span>
-                        </button>
-                    </div>
+                    <ButtonAdd
+                        handleButton={handleNewRental}
+                        text="New Rental"
+                    />
                 )}
 
                 <div className="mt-4">
@@ -97,7 +104,8 @@ export default function Clients() {
                                 key={rental.id}
                                 rental={rental}
                                 expandedRentals={expandedRentals}
-                                toggleExpand={toggleExpand}
+                                toggleExpand={(id) => setExpandedRentals((prev) => ({ ...prev, [id]: !prev[id] }))}
+                                handleOpenModal={handleOpenModal}
                             />
                         ))}
                 </div>
@@ -105,6 +113,12 @@ export default function Clients() {
                     show={showErrorModal}
                     message={errorMessage}
                     onClose={handleCloseModal}
+                />
+                <ConfirmPaymentModal
+                    show={showModalConfirmPayment}
+                    onClose={handleCloseModalPayment}
+                    rentalId={currentRentalId}
+                    onUpdateRentalStatus={handleUpdateRentalStatus}
                 />
             </div>
         </Page>

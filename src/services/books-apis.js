@@ -39,3 +39,25 @@ export const fetchGenres = async () => {
         throw error;
     }
 };
+
+export const postBook = async (book) => {
+    try {
+        const response = await fetch(`${API_URL}/add`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(book),
+        });
+
+        if (response.ok) {
+            return true;
+        } else {
+            console.error(`Request error: ${response.status}`);
+            throw new Error(`Request error: ${response.status}`);
+        }
+    } catch (error) {
+        console.error("Error adding book:", error);
+        throw error;
+    }
+};

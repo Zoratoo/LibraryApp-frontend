@@ -3,9 +3,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FaChevronUp, FaChevronDown } from "react-icons/fa";
 import { LuCalendarArrowUp, LuCalendarArrowDown } from "react-icons/lu";
 import BookRentalCard from '../book/book-rentals-card.jsx';
-import '../../css/client/clients.css';
+import { FaCashRegister } from "react-icons/fa6";
 
-const RentalCard = ({ rental, expandedRentals, toggleExpand }) => {
+const RentalCard = ({ rental, expandedRentals, toggleExpand, handleOpenModal }) => {
     return (
         <motion.div
             key={rental.id}
@@ -29,9 +29,16 @@ const RentalCard = ({ rental, expandedRentals, toggleExpand }) => {
                         {rental.status === 'f' ? 'Finished' : rental.status === 'n' ? 'Not payed' : 'In Progress'}
                     </span>
                 </div>
-                <button className="btn btn-light" onClick={() => toggleExpand(rental.id)}>
-                    {expandedRentals[rental.id] ? <FaChevronUp /> : <FaChevronDown />}
-                </button>
+                <div style={{ gap: "1rem" }} >
+                    {rental.status !== 'f' && (
+                        <button className="btn btn-light">
+                            <FaCashRegister onClick={() => handleOpenModal(rental.id)} />
+                        </button>
+                    )}
+                    <button className="btn btn-light" onClick={() => toggleExpand(rental.id)}>
+                        {expandedRentals[rental.id] ? <FaChevronUp /> : <FaChevronDown />}
+                    </button>
+                </div>
             </div>
 
             <AnimatePresence>
@@ -49,7 +56,7 @@ const RentalCard = ({ rental, expandedRentals, toggleExpand }) => {
                     </motion.div>
                 )}
             </AnimatePresence>
-        </motion.div>
+        </motion.div >
     );
 };
 

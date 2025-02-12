@@ -3,7 +3,7 @@ import { IoIosSearch } from "react-icons/io";
 import { MdPersonAddAlt1 } from "react-icons/md";
 import { useNavigate } from 'react-router-dom';
 
-const SearchInput = ({ cpf, handleCpfChange, handleSearch, isLoading, showAddIcon }) => {
+const SearchInput = ({ cpf, handleCpfChange, handleSearch, showAddIcon }) => {
     const navigate = useNavigate();
 
     const handleAddClient = () => {
@@ -12,10 +12,15 @@ const SearchInput = ({ cpf, handleCpfChange, handleSearch, isLoading, showAddIco
 
     return (
         <div>
-            <div className="d-flex justify-content-center">
+            <div className="d-flex justify-content-center" style={{ marginBottom: '2%' }}>
                 <div className="input-group" style={{ width: '40%' }}>
-                    <span className="input-group-text" style={{ border: '2px solid #ced4da', backgroundColor: '#fff' }}>
-                        <IoIosSearch style={{ width: '20px', height: '20px', color: '#6c757d' }} />
+                    <span
+                        className="search-div input-group-text"
+                        style={{ border: '2px solid #ced4da', backgroundColor: '#fff', cursor: cpf ? 'pointer' : 'auto' }}
+                        onClick={handleSearch}
+
+                    >
+                        <IoIosSearch style={{ width: '20px', height: '20px', color: !cpf ? '#6c757d' : 'black' }} />
                     </span>
                     <input
                         value={cpf}
@@ -48,15 +53,6 @@ const SearchInput = ({ cpf, handleCpfChange, handleSearch, isLoading, showAddIco
                         <MdPersonAddAlt1 style={{ width: '20px', height: '20px', color: 'black' }} />
                     </span>
                 )}
-            </div>
-            <div className="d-flex justify-content-center mb-4">
-                <button
-                    onClick={handleSearch}
-                    className="btn btn-primary"
-                    disabled={isLoading || !cpf}
-                >
-                    {isLoading ? 'Searching...' : 'Search'}
-                </button>
             </div>
         </div>
     );

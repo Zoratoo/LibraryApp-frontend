@@ -1,5 +1,3 @@
-
-
 .btn-new-rental {
     font-size: .8rem;
     position: relative;
@@ -11,7 +9,7 @@
     border-radius: 50px;
     justify-content: center;
     font-weight: bold;
-    background-color: #343a40;
+    background-color: #0B132B;
     color: white;
     border: none;
     cursor: pointer;
@@ -20,7 +18,7 @@
 
 .btn-new-rental:hover {
     background-color: #ffffff;
-    color: #343a40 !important;
+    color: #0B132B !important;
 }
 
 .btn-new-rental:hover .btn-new-rental-bg {

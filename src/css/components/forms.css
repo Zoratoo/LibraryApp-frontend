@@ -1,0 +1,42 @@
+.form-card {
+    max-width: 65%;
+    margin: 0 auto;
+}
+
+.form-group label {
+    font-weight: bold;
+}
+
+.form-group input {
+    border-radius: 5px;
+}
+
+.btn-primary {
+    margin-top: 2%;
+    font-size: 16px;
+    border-radius: 5px;
+}
+
+.custom-input {
+    border: 2px solid #ced4da;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+}
+
+.btn-modern {
+    margin-top: 1%;
+    background-color: #0B132B;
+    color: white; 
+    border: none;
+    padding: 10px 20px; 
+    font-size: 15px; 
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer; 
+    border-radius: 30px;
+    transition: all 0.3s ease;
+}
+
+.btn-modern:hover {
+    background-color: #3A4C7A;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); 
+}
